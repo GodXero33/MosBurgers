@@ -59,9 +59,6 @@ try {
 	} else {
 		sendMessage(false, "Failed to add food. Please try again.");
 	}
-
-	$pdo = null;
-	$stmt = null;
 } catch (PDOException $e) {
 	sendMessage(false, "Query failed: " . $e->getMessage());
 }

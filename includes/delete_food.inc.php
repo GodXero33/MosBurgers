@@ -20,8 +20,6 @@ try {
 
 	if (!$executed) {
 		sendMessage(false, "Failed to delete food. Please try again.");
-		$pdo = null;
-		$stmt = null;
 		die();
 	}
 
@@ -29,8 +27,6 @@ try {
 
 	if (empty($results)) {
 		sendMessage(false, "Failed tofind the food item with the code '" . $code . "'.");
-		$pdo = null;
-		$stmt = null;
 		die();
 	}
 
@@ -41,15 +37,10 @@ try {
 
 	if (!$executed) {
 		sendMessage(false, "Failed to delete food. Please try again.");
-		$pdo = null;
-		$stmt = null;
 		die();
 	}
 
 	sendMessage(true, "Successfully deleted the food item with the code '" . $code . "'.");
-
-	$pdo = null;
-	$stmt = null;
 } catch (PDOException $e) {
 	sendMessage(false, "Query failed: " . $e->getMessage());
 }
