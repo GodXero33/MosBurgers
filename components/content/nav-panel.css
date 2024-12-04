@@ -1,53 +1,3 @@
-<nav id="nav-panel">
-	<div></div>
-	<div>
-		<div class="logo centered-img">
-			<div class="motel"></div>
-			<input type="checkbox">
-		</div>
-	</div>
-	<div>
-		<div class="btn" title="home">
-			<div class="centered-img"></div>
-			<div>
-				<p>HOME</p>
-			</div>
-			<input type="radio" name="nav-panel-btn" checked>
-		</div>
-		<div class="btn" title="place-order">
-			<div class="centered-img"></div>
-			<div>
-				<p>PLACE ORDER</p>
-			</div>
-			<input type="radio" name="nav-panel-btn">
-		</div>
-		<div class="btn" title="add-item">
-			<div class="centered-img"></div>
-			<div>
-				<p>ADD ITEM</p>
-			</div>
-			<input type="radio" name="nav-panel-btn">
-		</div>
-		<div class="btn" title="add-item">
-			<div class="centered-img"></div>
-			<div>
-				<p>REPORTS</p>
-			</div>
-			<input type="radio" name="nav-panel-btn">
-		</div>
-	</div>
-</nav>
-<div id="content-container">
-	<section id="home-section">
-		<div class="container">
-			<h1>MOS BURGERS</h1>
-		</div>
-	</section>
-	<section class="hide"></section>
-	<section class="hide"></section>
-	<section class="hide"></section>
-</div>
-<style>
 #nav-panel {
 	& {
 		--font-local-size: clamp(1rem, 5vw, 1.5rem);
@@ -97,7 +47,7 @@
 		right: 0;
 		width: calc(var(--font-local-size) * 1.5);
 		height: calc(var(--font-local-size) * 1.5);
-		background-image: url(res/img/logo.png);
+		background-image: url(../../res/img/logo.png);
 		background-size: 80% 80%;
 	}
 
@@ -164,19 +114,19 @@
 	}
 
 	& > div:last-child .btn:nth-child(1) > div:first-child {
-		background-image: url(res/img/home.png);
+		background-image: url(../../res/img/home.png);
 	}
 
 	& > div:last-child .btn:nth-child(2) > div:first-child {
-		background-image: url(res/img/place-order.png);
+		background-image: url(../../res/img/place-order.png);
 	}
 
 	& > div:last-child .btn:nth-child(3) > div:first-child {
-		background-image: url(res/img/warehouse.png);
+		background-image: url(../../res/img/warehouse.png);
 	}
 
 	& > div:last-child .btn:nth-child(4) > div:first-child {
-		background-image: url(res/img/report.png);
+		background-image: url(../../res/img/report.png);
 	}
 
 	& > div:last-child .btn > div:nth-child(2) {
@@ -215,62 +165,3 @@
 		}
 	}
 }
-</style>
-<style>
-#content-container {
-	& {
-		--nav-size: calc(clamp(1rem, 5vw, 1.5rem) * 1.5);
-		position: relative;
-		top: 0;
-		left: var(--nav-size);
-		width: calc(100% - var(--nav-size));
-		height: 100svh;
-	}
-
-	& section {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		opacity: 1;
-		pointer-events: all;
-		transition: opacity 0.1s linear;
-	}
-
-	& section.hide {
-		opacity: 0;
-		pointer-events: none;
-	}
-
-	& section .container {
-		position: absolute;
-		margin-block: auto;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		width: 100%;
-		height: fit-content;
-		max-height: 100%;
-		overflow-x: hidden;
-		overflow-y: auto;
-		scrollbar-width: thin;
-		scrollbar-color: var(--scrollbar-color) transparent;
-	}
-}
-</style>
-<style>
-#home-section .container {
-	& {
-		--font-local-size: clamp(1rem, 5vw, 1.5rem);
-	}
-
-	& h1 {
-		padding: calc(var(--font-local-size) * 0.2);
-		font-size: calc(var(--font-local-size) * 2);
-		text-align: center;
-		letter-spacing: calc(var(--font-local-size) * 0.15);
-		color: var(--text-color-v1);
-	}
-}
-</style>

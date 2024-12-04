@@ -59,6 +59,7 @@
 	}
 
 	function init () {
+		newStyleSheet('components/login/login.css', 'login');
 		SHOP_WINDOW['loader'].classList.add('hide');
 	
 		document.getElementById('login-btn').addEventListener('click', loginClick);
@@ -68,7 +69,7 @@
 
 	async function createLogin () {
 		try {
-			const response = await fetch('components/login.html');
+			const response = await fetch('components/login/login.html');
 
 			if (!response.ok) throw new Error('Failed to fetch');
 

@@ -1,5 +1,9 @@
 (function () {
 	function init () {
+		deleteStyleSheet('login');
+		newStyleSheet('components/content/nav-panel.css', 'nav-panel');
+		newStyleSheet('components/content/content.css', 'content');
+		newStyleSheet('components/content/home.css', 'home');
 		SHOP_WINDOW['loader'].classList.add('hide');
 
 		loadDynamicSrcipt('js/nav-panel.js').then(data => {
@@ -16,7 +20,7 @@
 
 	async function createContent () {
 		try {
-			const response = await fetch('components/content.html');
+			const response = await fetch('components/content/content.html');
 
 			if (!response.ok) throw new Error('Failed to fetch');
 

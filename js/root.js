@@ -1,5 +1,18 @@
 const SHOP_WINDOW = {};
 
+function newStyleSheet (url, name) {
+	const style = document.createElement('link');
+	style.setAttribute('rel', 'stylesheet');
+	style.setAttribute('href', url);
+	style.setAttribute('mos-style-name', name);
+	document.head.appendChild(style);
+}
+
+function deleteStyleSheet (name) {
+	const style = document.head.querySelector(`link[mos-style-name="${name}"]`);
+	style.remove();
+}
+
 function loadDynamicSrcipt (url) {
 	return new Promise((res, rej) => {
 		try {
