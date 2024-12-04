@@ -4,12 +4,66 @@
 		<title>Template</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
+		<link rel="shortcut icon" href="res/img/logo.png" type="image/x-icon">
+		<link rel="stylesheet" href="css/root.css">
 		<link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="css/nav-panel.css">
+		<link rel="stylesheet" href="css/content-container.css">
+		<link rel="stylesheet" href="css/home-section.css">
 		<script type="text/javascript" src="js/sketch.js"></script>
+		<script type="text/javascript" src="js/nav-panel.js" defer></script>
 	</head>
 	<body>
-		<div id="main-container">
-			
-		</div>
+		<main id="main-container">
+			<nav id="nav-panel">
+				<div></div>
+				<div>
+					<div class="logo centered-img">
+						<div class="motel"></div>
+						<input type="checkbox">
+					</div>
+				</div>
+				<div>
+					<div class="btn" title="home">
+						<div class="centered-img"></div>
+						<div>
+							<p>HOME</p>
+						</div>
+						<input type="radio" name="nav-panel-btn" checked>
+					</div>
+					<div class="btn" title="place-order">
+						<div class="centered-img"></div>
+						<div>
+							<p>PLACE ORDER</p>
+						</div>
+						<input type="radio" name="nav-panel-btn">
+					</div>
+					<div class="btn" title="add-item">
+						<div class="centered-img"></div>
+						<div>
+							<p>ADD ITEM</p>
+						</div>
+						<input type="radio" name="nav-panel-btn">
+					</div>
+					<div class="btn" title="add-item">
+						<div class="centered-img"></div>
+						<div>
+							<p>REPORTS</p>
+						</div>
+						<input type="radio" name="nav-panel-btn">
+					</div>
+				</div>
+			</nav>
+			<div id="content-container">
+				<section id="home-section">
+					<div class="container">
+						<h1>MOS BURGERS</h1>
+					</div>
+				</section>
+				<section class="hide"></section>
+				<section class="hide"></section>
+				<section class="hide"></section>
+			</div>
+		</main>
 	</body>
 </html>
