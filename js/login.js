@@ -1,12 +1,10 @@
 (function () {
-	const admins = JSON.parse(window.localStorage.getItem('admins'));
-
 	function inputResetValidity (event) {
 		event.target.setCustomValidity('');
 		event.target.reportValidity();
 	}
 
-	function loginClick () {
+	async function loginClick (event) {
 		const userNameInput = document.getElementById('user-name-input');
 		const passwordInput = document.getElementById('password-input');
 		const userName = userNameInput.value;
@@ -18,7 +16,24 @@
 			return;
 		}
 
-		const user = admins.find(admin => admin['user_name'] == userName);
+		let user;
+
+		try {
+			event.target.disabled = true;
+			const response = await fetch('http://localhost:5500/admin/' + userName);
+			event.target.disabled = false;
+
+			if (!response.ok) throw new Error('Failed to fetch admins.');
+
+			user = await response.json();
+		} catch (error) {
+			console.error(error);
+			alert('Hey, Somthing went wrong. Please try again!');
+			event.target.disabled = false;
+			return;
+		}
+
+		console.log(user);
 
 		if (!user) {
 			userNameInput.setCustomValidity('User Name is not found!');
@@ -48,7 +63,7 @@
 
 	function loginSuccess (user) {
 		releaseMemory();
-		document.title = `Mos Burger - ${user['user_name']}`;
+		document.title = `Mos Burger - ${user['name']}`;
 		SHOP_WINDOW['loader'].classList.remove('hide');
 
 		loadDynamicSrcipt('js/content.js').then(data => {
@@ -69,7 +84,7 @@
 
 	async function createLogin () {
 		try {
-			const response = await fetch('components/login/login.html');
+			const response = await fetch('components/login/login.html', { cache: 'no-cache' });
 
 			if (!response.ok) throw new Error('Failed to fetch');
 

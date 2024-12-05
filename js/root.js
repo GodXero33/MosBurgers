@@ -1,9 +1,11 @@
 const SHOP_WINDOW = {};
 
+
+
 function newStyleSheet (url, name) {
 	const style = document.createElement('link');
 	style.setAttribute('rel', 'stylesheet');
-	style.setAttribute('href', url);
+	style.setAttribute('href', `${url}?t=${new Date().getTime()}`);
 	style.setAttribute('mos-style-name', name);
 	document.head.appendChild(style);
 }
@@ -19,7 +21,7 @@ function loadDynamicSrcipt (url) {
 			const script = document.createElement('script');
 			script.type = 'text/javascript';
 			script.async = true;
-			script.src = url;
+			script.src = `${url}?t=${new Date().getTime()}`;
 
 			script.addEventListener('load', () => {
 				res({ ok: true });

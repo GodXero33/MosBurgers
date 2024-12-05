@@ -20,7 +20,7 @@
 
 	async function createContent () {
 		try {
-			const response = await fetch('components/content/content.html');
+			const response = await fetch('components/content/content.html', { cache: 'no-cache' });
 
 			if (!response.ok) throw new Error('Failed to fetch');
 

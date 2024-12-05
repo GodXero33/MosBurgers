@@ -62,7 +62,7 @@
 		cursor: pointer;
 	}
 
-	& > div:nth-child(2) .logo .motel {
+	& > div:nth-child(2) .logo .backdrop {
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -159,7 +159,7 @@
 			opacity: 1;
 		}
 
-		& > div:nth-child(2) .logo .motel {
+		& > div:nth-child(2) .logo .backdrop {
 			opacity: 1;
 			pointer-events: all;
 		}

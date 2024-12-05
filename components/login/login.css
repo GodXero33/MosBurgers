@@ -81,6 +81,11 @@
 		box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 	}
 
+	& > div button:disabled {
+		background-color: #a6e5f8;
+		cursor: default;
+	}
+
 	@container main (max-width: 400px) {
 		& > div {
 			grid-template-columns: auto;
