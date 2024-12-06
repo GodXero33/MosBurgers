@@ -210,6 +210,21 @@
 			background-color: var(--background-color);
 		}
 
+		#cart-place-btn {
+			position: absolute;
+			margin-inline: auto;
+			bottom: 0.5rem;
+			left: 0;
+			right: 0;
+			width: 4rem;
+			height: 2rem;
+			background-color: var(--place-order-add-color);
+			border-radius: 0.4rem;
+			cursor: pointer;
+			background-image: url(../../res/img/add-cart-light.png);
+			background-size: auto 80%;
+		}
+
 		#cart-close-btn {
 			position: absolute;
 			top: 0.5rem;
@@ -226,12 +241,17 @@
 		#cart-holder {
 			position: absolute;
 			margin: auto;
+			padding-bottom: 4rem;
 			top: calc(var(--close-btn-size) + 0.7rem);
 			left: 0;
 			right: 0;
 			width: calc(100% - 0.5rem);
 			height: calc(100% - var(--close-btn-size) - 0.7rem);
 			max-width: 640px;
+			overflow-x: hidden;
+			overflow-y: auto;
+			scrollbar-width: thin;
+			scrollbar-color: var(--scrollbar-color) transparent;
 		}
 	}
 }

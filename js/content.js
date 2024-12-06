@@ -7,6 +7,7 @@
 		newStyleSheet('components/content/place-order.css', 'place-order');
 		newStyleSheet('components/food-item/item-card.css', 'item-card');
 		newStyleSheet('components/food-item/item-place.css', 'item-place');
+		newStyleSheet('components/food-item/cart.css', 'cart');
 		SHOP_WINDOW['loader'].classList.add('hide');
 
 		loadDynamicSrcipt('js/nav-panel.js').then(data => {

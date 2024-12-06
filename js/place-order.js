@@ -6,10 +6,17 @@
 	const itemPlaceCardContainer = document.getElementById('item-place-card-holder');
 	const itemPlaceCountInput = document.getElementById('item-place-count-input');
 	const itemPlacePlaceBtn = document.getElementById('item-place-place-btn');
+	const cartContainer = document.getElementById('cart-container');
+	const cartCloseBtn = document.getElementById('cart-close-btn');
+	const cartOpenBtn = document.getElementById('open-cart-btn');
+	const cartPlaceBtn = document.getElementById('cart-place-btn');
+	const cartHolder = document.getElementById('cart-holder');
 
 	let items = null;
 	let placeOrderCardComponent = null;
 	let itemPlaceComponent = null;
+	let cartComponent = null;
+	let cartItemComponent = null;
 	let currentPlaceItemIndex = -1;
 	let currentPlaceItemCard = null;
 	const cart = {
@@ -18,6 +25,20 @@
 		discount: 0,
 		total: 0
 	};
+
+	function placeOrder () {
+		console.log(true);
+	}
+
+	function hideCartCard () {
+		cartContainer.classList.remove('show');
+	}
+
+	function openCartCard () {
+		cartContainer.classList.add('show');
+
+		cartHolder.innerHTML = cartComponent;
+	}
 
 	function updateCart () {
 		let price = 0;
@@ -142,30 +163,20 @@
 			if (!response.ok) throw new Error('Failed to fetch items data.');
 
 			items = await response.json();
+			console.log(items);
 		} catch (error) {
 			console.error(error);
 		}
 	}
 
-	async function loadItemsComponent () {
+	async function loadComponent (component) {
 		try {
-			const response = await fetch('components/food-item/item-card.html');
+			const response = await fetch(`components/food-item/${component}.html`);
 
-			if (!response.ok) throw new Error('Failed to fetch place-order-card component.');
+			if (!response.ok) throw new Error(`Failed to fetch ${component} component.`);
 
-			placeOrderCardComponent = await response.text();
-		} catch (error) {
-			console.error(error);
-		}
-	}
-
-	async function loadItemPlaceComponent () {
-		try {
-			const response = await fetch('components/food-item/item-place.html');
-
-			if (!response.ok) throw new Error('Failed to fetch place-order-card component.');
-
-			itemPlaceComponent = await response.text();
+			const componentHTML = await response.text();
+			return componentHTML;
 		} catch (error) {
 			console.error(error);
 		}
@@ -173,14 +184,31 @@
 
 	async function loadFoodResources () {
 		await loadItems();
-		await loadItemsComponent();
-		await loadItemPlaceComponent();
+		placeOrderCardComponent = await loadComponent('item-card');
+		itemPlaceComponent = await loadComponent('item-place');
+		cartComponent = await loadComponent('cart');
+		cartItemComponent = await loadComponent('cart-item');
 
 		createFoodCards();
 
 		document.getElementById('place-order-section').addEventListener('click', (event) => {
 			if (event.target == itemPlaceContainerCloseBtn || event.target == itemPlaceContainerBackdrop) {
 				hideItemPlaceCard();
+				return;
+			}
+
+			if (event.target == cartCloseBtn) {
+				hideCartCard();
+				return;
+			}
+
+			if (event.target == cartOpenBtn) {
+				openCartCard();
+				return;
+			}
+
+			if (event.target == cartPlaceBtn) {
+				placeOrder();
 				return;
 			}
 
