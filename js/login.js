@@ -76,6 +76,7 @@
 	function loginSuccess (user) {
 		releaseMemory();
 		document.title = `Mos Burger - ${user['name']}`;
+		SHOP_WINDOW['admin'] = user;
 		SHOP_WINDOW['loader'].classList.remove('hide');
 
 		loadDynamicSrcipt('js/content.js').then(data => {

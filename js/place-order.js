@@ -20,31 +20,71 @@
 	let currentPlaceItemIndex = -1;
 	let currentPlaceItemCard = null;
 	const cart = {
-		items: [
-			{
-				count: 1,
-				discount: 0,
-				item: {
-					category: 'Burgers',
-					code: 'VGB003',
-					discount: 0,
-					item_id: 3,
-					name: 'Veggie Burger',
-					price: 5.49
-				},
-				price: 5.49,
-				total: 5.49
-			}
-		],
-		price: 5.49,
+		items: [],
+		price: 0,
 		discount: 0,
-		total: 5.49
+		total: 0
 	};
 
-	function placeOrder () {
+	async function placeOrder () {
 		if (cart.items.length == 0) {
 			sendWarningAlert('The cart is Empty. Can\'t place an order right networkInterfaces. Please add somthing into the cart.');
 			return;
+		}
+
+		// After adding customer details
+		const customer_id = 1;
+		const admin_id = SHOP_WINDOW['admin'].admin_id;
+		const today = new Date();
+		const place_date = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+		const total_amount = cart.total;
+		const discount = cart.discount;
+		const final_amount = cart.total;
+		
+		const order = {
+			customer_id,
+			admin_id,
+			place_date,
+			total_amount,
+			discount,
+			final_amount,
+			items: cart.items.map(cartItem => {
+				const item_id = cartItem.item.item_id;
+				const quantity = cartItem.count;
+				const total_price = cartItem.total;
+				const price_per_unit = cartItem.item.price;
+
+				return {
+					item_id,
+					quantity,
+					total_price,
+					price_per_unit
+				};
+			})
+		};
+
+		try {
+			const response = await fetch(`${SHOP_WINDOW.db_host}/order`, {
+				method: 'POST',
+				body: JSON.stringify(order),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (!response.ok) throw new Error('Somthing went wrong while placing order.');
+
+			const data = await response.json();
+			
+			if (data.ok) {
+				alert('Order Placed!');
+				hideCartCard();
+				resetCart();
+			} else {
+				alert('Order Failed!');
+			}
+		} catch (error) {
+			console.log(error);
 		}
 	}
 
@@ -73,6 +113,17 @@
 			.replace(':PRICE', cart.price.toFixed(2))
 			.replace(':DISCOUNT', cart.discount.toFixed(2))
 			.replace(':TOTAL', cart.total.toFixed(2));
+	}
+
+	function resetCart () {
+		cart.items = [],
+		cart.price = 0;
+		cart.discount = 0;
+		cart.total = 0;
+
+		itemsHolder.querySelectorAll('.item-card').forEach(card => {
+			if (card.classList.contains('active')) card.classList.remove('active');
+		});
 	}
 
 	function updateCart () {
@@ -258,7 +309,6 @@
 
 		itemPlacePlaceBtn.addEventListener('click', addPlaceItemToCart);
 		itemPlaceCountInput.addEventListener('input', updateItemPlaceCard);
-		cartOpenBtn.click(); // remove
 	}
 
 	loadFoodResources();

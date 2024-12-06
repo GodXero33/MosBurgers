@@ -69,8 +69,8 @@ CREATE TABLE order_item (
 
 CREATE TABLE receipt (
 	receipt_id INT AUTO_INCREMENT,
-	receipt_date TIME NOT NULL,
-	receipt_time DATE NOT NULL,
+	receipt_date DATE NOT NULL,
+	receipt_time TIME NOT NULL,
 	order_id INT,
 	FOREIGN KEY (order_id) REFERENCES mos_order (order_id),
 	PRIMARY KEY (receipt_id)
@@ -122,34 +122,7 @@ INSERT INTO customer (name, phone, email, address) VALUES
 ('Rose DeWitt', '5558901234', 'rose.dewitt@gmail.com', '23 Drama Ave.'),
 ('Clark Kent', '5552468101', 'clark.kent@gmail.com', '77 Hero Rd.');
 
-INSERT INTO mos_order (place_date, total_amount, discount, final_amount, customer_id, admin_id) VALUES
-('2024-12-01', 15.97, 1.00, 14.97, 1, 1),
-('2024-12-02', 19.97, 2.00, 17.97, 2, 2),
-('2024-12-03', 10.97, 0.50, 10.47, 3, 3),
-('2024-12-04', 22.47, 3.00, 19.47, 4, 4),
-('2024-12-05', 18.97, 1.50, 17.47, 5, 5);
-
-INSERT INTO order_item (item_id, order_id, quantity, total_price, price_per_unit) VALUES
-(1, 1, 2, 11.98, 5.99),
-(2, 1, 1, 3.99, 3.99),
-(3, 2, 3, 16.47, 5.49),
-(4, 2, 1, 3.50, 3.50),
-(5, 3, 2, 13.98, 6.99),
-(6, 4, 1, 2.49, 2.49),
-(7, 5, 2, 9.98, 4.99),
-(8, 5, 1, 2.99, 2.99);
-
-INSERT INTO receipt (receipt_date, receipt_time, order_id) VALUES
-('2024-12-01', '10:30:00', 1),
-('2024-12-02', '11:15:00', 2),
-('2024-12-03', '12:45:00', 3),
-('2024-12-04', '14:00:00', 4),
-('2024-12-05', '16:20:00', 5);
-
 SELECT * FROM report;
 SELECT * FROM food_item;
 SELECT * FROM admin;
 SELECT * FROM customer;
-SELECT * FROM mos_order;
-SELECT * FROM order_item;
-SELECT * FROM receipt;

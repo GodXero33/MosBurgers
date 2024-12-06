@@ -47,9 +47,9 @@ VALUES (?, ?, ?, ?)
 	return loadCustomerById(id);
 }
 
-export async function loadAdminByName (name, password) {
+export async function loadAdminByName (name) {
 	const [results] = await pool.query(`
-SELECT name, address, dob, email, phone, position, salary
+SELECT name, address, dob, email, phone, position, salary, admin_id
 FROM admin
 WHERE name = ?
 	`, [name]);
@@ -58,7 +58,7 @@ WHERE name = ?
 
 export async function loadAdminByNameAndPW (name, password) {
 	const [results] = await pool.query(`
-SELECT name, address, dob, email, phone, position, salary
+SELECT name, address, dob, email, phone, position, salary, admin_id
 FROM admin
 WHERE name = ? AND password = ?
 	`, [name, password]);
@@ -71,4 +71,28 @@ SELECT *
 FROM food_item
 	`);
 	return results;
+}
+
+export async function placeOrder (customer_id, admin_id, place_date, total_amount, discount, final_amount, items) {
+	let [result] = await pool.query(`
+INSERT INTO mos_order (customer_id, admin_id, place_date, total_amount, discount, final_amount)
+VALUES (?, ?, ?, ?, ?, ?)
+	`, [customer_id, admin_id, place_date, total_amount, discount, final_amount]);
+	const order_id = result.insertId;
+
+	items.forEach(async item => {
+		await pool.query(`
+INSERT INTO order_item (item_id, order_id, quantity, total_price, price_per_unit)
+VALUES (?, ?, ?, ?, ?)
+		`, [item.item_id, order_id, item.quantity, item.total_price, item.price_per_unit]);
+	});
+
+	const today = new Date();
+	const date = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+	const time = `${today.getHours()}:${today.getMinutes()}:00`;
+
+	await pool.query(`
+INSERT INTO receipt (receipt_date, receipt_time, order_id)
+VALUES (?, ?, ?)
+	`, [date, time, order_id]);
 }

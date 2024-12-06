@@ -9,7 +9,8 @@ import {
 	addCustomer,
 	loadAdminByName,
 	loadAdminByNameAndPW,
-	loadItems
+	loadItems,
+	placeOrder
 } from './database.js';
 
 const app = express();
@@ -68,11 +69,27 @@ app.post('/customers', async (req, res) => {
 	res.status(201).send(customer);
 });
 
-/* app.post('/order', async (req, res) => {
-	const { name, phone, email, address } = req.body;
-	const customer = await addCustomer(name, phone, email, address);
-	res.status(201).send(customer);
-}); */
+app.post('/order', async (req, res) => {
+	const {
+		customer_id,
+		admin_id,
+		place_date,
+		total_amount,
+		discount,
+		final_amount,
+		items
+	} = req.body;
+	await placeOrder(
+		customer_id,
+		admin_id,
+		place_date,
+		total_amount,
+		discount,
+		final_amount,
+		items
+	);
+	res.status(201).send({ ok: true });
+});
 
 app.use((err, req, res, next) => {
 	console.error(err.stack);
