@@ -20,14 +20,32 @@
 	let currentPlaceItemIndex = -1;
 	let currentPlaceItemCard = null;
 	const cart = {
-		items: [],
-		price: 0,
+		items: [
+			{
+				count: 1,
+				discount: 0,
+				item: {
+					category: 'Burgers',
+					code: 'VGB003',
+					discount: 0,
+					item_id: 3,
+					name: 'Veggie Burger',
+					price: 5.49
+				},
+				price: 5.49,
+				total: 5.49
+			}
+		],
+		price: 5.49,
 		discount: 0,
-		total: 0
+		total: 5.49
 	};
 
 	function placeOrder () {
-		console.log(true);
+		if (cart.items.length == 0) {
+			sendWarningAlert('The cart is Empty. Can\'t place an order right networkInterfaces. Please add somthing into the cart.');
+			return;
+		}
 	}
 
 	function hideCartCard () {
@@ -37,7 +55,24 @@
 	function openCartCard () {
 		cartContainer.classList.add('show');
 
-		cartHolder.innerHTML = cartComponent;
+		let cartItemsHTML = '';
+
+		cart.items.forEach(cartItem => {
+			itemHTML = cartItemComponent
+				.replace(':NAME', cartItem.item.name)
+				.replace(':QUANTITY', cartItem.count)
+				.replace(':PRICE', cartItem.price.toFixed(2))
+				.replace(':DISCOUNT', cartItem.discount.toFixed(2))
+				.replace(':TOTAL', cartItem.total.toFixed(2));
+			
+			cartItemsHTML += itemHTML;
+		});
+
+		cartHolder.innerHTML = cartComponent
+			.replace(':ITEMS', cartItemsHTML)
+			.replace(':PRICE', cart.price.toFixed(2))
+			.replace(':DISCOUNT', cart.discount.toFixed(2))
+			.replace(':TOTAL', cart.total.toFixed(2));
 	}
 
 	function updateCart () {
@@ -163,7 +198,6 @@
 			if (!response.ok) throw new Error('Failed to fetch items data.');
 
 			items = await response.json();
-			console.log(items);
 		} catch (error) {
 			console.error(error);
 		}
@@ -224,6 +258,7 @@
 
 		itemPlacePlaceBtn.addEventListener('click', addPlaceItemToCart);
 		itemPlaceCountInput.addEventListener('input', updateItemPlaceCard);
+		cartOpenBtn.click(); // remove
 	}
 
 	loadFoodResources();

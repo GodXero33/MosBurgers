@@ -68,6 +68,12 @@ app.post('/customers', async (req, res) => {
 	res.status(201).send(customer);
 });
 
+/* app.post('/order', async (req, res) => {
+	const { name, phone, email, address } = req.body;
+	const customer = await addCustomer(name, phone, email, address);
+	res.status(201).send(customer);
+}); */
+
 app.use((err, req, res, next) => {
 	console.error(err.stack);
 	res.status(500).send('Something broke!');
