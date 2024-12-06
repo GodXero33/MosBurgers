@@ -47,11 +47,28 @@ VALUES (?, ?, ?, ?)
 	return loadCustomerById(id);
 }
 
-export async function loadAdminByName (name) {
+export async function loadAdminByName (name, password) {
 	const [results] = await pool.query(`
-SELECT *
+SELECT name, address, dob, email, phone, position, salary
 FROM admin
 WHERE name = ?
 	`, [name]);
 	return results[0];
+}
+
+export async function loadAdminByNameAndPW (name, password) {
+	const [results] = await pool.query(`
+SELECT name, address, dob, email, phone, position, salary
+FROM admin
+WHERE name = ? AND password = ?
+	`, [name, password]);
+	return results[0];
+}
+
+export async function loadItems () {
+	const [results] = await pool.query(`
+SELECT *
+FROM food_item
+	`);
+	return results;
 }

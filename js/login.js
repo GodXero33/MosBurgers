@@ -16,12 +16,11 @@
 			return;
 		}
 
+		event.target.disabled = true;
 		let user;
 
 		try {
-			event.target.disabled = true;
-			const response = await fetch('http://localhost:5500/admin/' + userName);
-			event.target.disabled = false;
+			const response = await fetch(`${SHOP_WINDOW.db_host}/admin/${userName}`);
 
 			if (!response.ok) throw new Error('Failed to fetch admins.');
 
@@ -33,17 +32,30 @@
 			return;
 		}
 
-		console.log(user);
-
-		if (!user) {
+		if (!user.ok) {
 			userNameInput.setCustomValidity('User Name is not found!');
 			userNameInput.reportValidity();
+			event.target.disabled = false;
 			return;
 		}
 
-		if (user['password'] != password) {
+		try {
+			const response = await fetch(`${SHOP_WINDOW.db_host}/admin/${userName}/${password}`);
+
+			if (!response.ok) throw new Error('Failed to fetch admins.');
+
+			user = await response.json();
+		} catch (error) {
+			console.error(error);
+			alert('Hey, Somthing went wrong. Please try again!');
+			event.target.disabled = false;
+			return;
+		}
+
+		if (!user.ok) {
 			passwordInput.setCustomValidity('Invalid Password!');
 			passwordInput.reportValidity();
+			event.target.disabled = false;
 			return;
 		}
 
@@ -80,6 +92,8 @@
 		document.getElementById('login-btn').addEventListener('click', loginClick);
 		document.getElementById('user-name-input').addEventListener('input', inputResetValidity);
 		document.getElementById('password-input').addEventListener('input', inputResetValidity);
+
+		document.getElementById('login-btn').click(); // remove
 	}
 
 	async function createLogin () {

@@ -14,10 +14,10 @@
 			</div>
 			<input type="radio" name="nav-panel-btn">
 		</div>
-		<div class="btn" title="place-order">
+		<div class="btn" title="foods">
 			<div class="centered-img"></div>
 			<div>
-				<p>PLACE ORDER</p>
+				<p>FOODS</p>
 			</div>
 			<input type="radio" name="nav-panel-btn" checked>
 		</div>
@@ -35,6 +35,13 @@
 			</div>
 			<input type="radio" name="nav-panel-btn">
 		</div>
+		<div class="btn" title="setting">
+			<div class="centered-img"></div>
+			<div>
+				<p>SETTING</p>
+			</div>
+			<input type="radio" name="nav-panel-btn">
+		</div>
 	</div>
 </nav>
 <div id="content-container">
@@ -43,9 +50,37 @@
 			<h1>MOS BURGERS</h1>
 		</div>
 	</section>
-	<section class="hide">
-		
+	<section id="place-order-section" class="hide">
+		<div class="container">
+			<h1>Foods</h1>
+			<div class="items">
+				<div>
+					<div id="place-order-items-holder"></div>
+				</div>
+			</div>
+		</div>
+		<div id="item-place-card">
+			<div class="backdrop"></div>
+			<div class="card-cont">
+				<div id="item-place-card-holder"></div>
+				<div class="input">
+					<input type="number" id="item-place-count-input" min="0" value="0" title="quantity">
+					<button class="centered-img" title="add" id="item-place-place-btn"></button>
+				</div>
+				<div id="item-place-card-close-btn" class="centered-img"></div>
+			</div>
+		</div>
+		<div id="open-cart-btn" class="centered-img" title="cart"></div>
+		<div id="cart-container" class="show">
+			<div class="wrapper">
+				<div id="cart-holder">
+					
+				</div>
+				<div id="cart-close-btn" class="centered-img"></div>
+			</div>
+		</div>
 	</section>
+	<section class="hide"></section>
 	<section class="hide"></section>
 	<section class="hide"></section>
 </div>

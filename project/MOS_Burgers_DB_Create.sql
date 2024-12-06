@@ -16,7 +16,6 @@ CREATE TABLE food_item (
 	code VARCHAR(15) NOT NULL UNIQUE,
 	price DOUBLE(8, 2) NOT NULL,
 	discount DOUBLE(8, 2) DEFAULT 0.0,
-	expire_date DATE NOT NULL,
 	category ENUM('Burgers', 'Submarines', 'Beverages', 'Other'),
 	PRIMARY KEY (item_id)
 );
@@ -97,17 +96,17 @@ INSERT INTO report (creation_date, type, detail) VALUES
 ('2023-10-01', 'Monthly', 'Staff performance evaluation.'),
 ('2023-09-01', 'Monthly', 'Quarterly targets overview.');
 
-INSERT INTO food_item (name, code, price, discount, expire_date, category) VALUES
-('Classic Burger', 'CLB001', 5.99, 0.50, '2024-12-31', 'Burgers'),
-('Cheese Burger', 'CHB002', 6.49, 0.30, '2024-12-31', 'Burgers'),
-('Veggie Burger', 'VGB003', 5.49, 0.00, '2024-12-31', 'Burgers'),
-('Chicken Submarine', 'CHS004', 7.99, 1.00, '2024-12-20', 'Submarines'),
-('Beef Submarine', 'BFS005', 8.49, 0.50, '2024-12-20', 'Submarines'),
-('Coke', 'CK006', 1.99, 0.20, '2024-12-15', 'Beverages'),
-('Orange Juice', 'OJ007', 2.49, 0.00, '2024-12-15', 'Beverages'),
-('Fries', 'FR008', 2.99, 0.00, '2024-12-15', 'Other'),
-('Ice Cream', 'IC009', 3.99, 0.25, '2024-12-10', 'Other'),
-('Milkshake', 'MS010', 4.49, 0.50, '2024-12-10', 'Beverages');
+INSERT INTO food_item (name, code, price, discount, category) VALUES
+('Classic Burger', 'CLB001', 5.99, 0.50, 'Burgers'),
+('Cheese Burger', 'CHB002', 6.49, 0.30, 'Burgers'),
+('Veggie Burger', 'VGB003', 5.49, 0.00, 'Burgers'),
+('Chicken Submarine', 'CHS004', 7.99, 1.00, 'Submarines'),
+('Beef Submarine', 'BFS005', 8.49, 0.50, 'Submarines'),
+('Coke', 'CK006', 1.99, 0.20, 'Beverages'),
+('Orange Juice', 'OJ007', 2.49, 0.00, 'Beverages'),
+('Fries', 'FR008', 2.99, 0.00, 'Other'),
+('Ice Cream', 'IC009', 3.99, 0.25, 'Other'),
+('Milkshake', 'MS010', 4.49, 0.50, 'Beverages');
 
 INSERT INTO admin (name, phone, email, address, salary, position, dob, password) VALUES
 ('John Doe', '1234567890', 'john.doe@mos.com', '123 Burger St.', 3000.00, 'Manager', '1985-03-25', 'manager123'),

@@ -2,7 +2,15 @@ import express from 'express';
 
 import cors from 'cors';
 
-import { loadCustomers, loadCustomerByName, loadCustomerById, addCustomer, loadAdminByName } from './database.js';
+import {
+	loadCustomers,
+	loadCustomerByName,
+	loadCustomerById,
+	addCustomer,
+	loadAdminByName,
+	loadAdminByNameAndPW,
+	loadItems
+} from './database.js';
 
 const app = express();
 app.use(express.json());
@@ -24,8 +32,34 @@ app.get('/customers/:id', async (req, res) => {
 
 app.get('/admin/:name', async (req, res) => {
 	const name = req.params.name;
-	const customer = await loadAdminByName(name);
+	let customer = await loadAdminByName(name);
+
+	if (customer) {
+		customer.ok = true;
+	} else {
+		customer = { ok: false };
+	}
+
 	res.send(customer);
+});
+
+app.get('/admin/:name/:password', async (req, res) => {
+	const name = req.params.name;
+	const password = req.params.password;
+	let customer = await loadAdminByNameAndPW(name, password);
+
+	if (customer) {
+		customer.ok = true;
+	} else {
+		customer = { ok: false };
+	}
+
+	res.send(customer);
+});
+
+app.get('/items', async (req, res) => {
+	const items = await loadItems();
+	res.send(items);
 });
 
 app.post('/customers', async (req, res) => {

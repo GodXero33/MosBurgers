@@ -1,12 +1,17 @@
 :root {
 	--font-size: 18px;
-	--theme-hue: 40deg;
+	--theme-hue: 0deg;
 	--background-color: hsl(var(--theme-hue), 100%, 40%);
 	--nav-bar-color: hsl(var(--theme-hue), 100%, 25%);
 	--nav-bar-btns-color: hsl(var(--theme-hue), 100%, 15%);
 	--fade-background-v1: rgba(0, 0, 0, 0.2);
 	--text-color-v1: #ffffff;
+	--text-color-v2: #000000;
 	--scrollbar-color: #000000;
+	--label-bg: #000000;
+	--nav-font-adjest: 18px;
+	--place-order-item-color: #000000;
+	--place-order-add-color: rgba(0, 0, 0, 0.6);
 }
 
 * {
@@ -23,7 +28,7 @@
 
 @media screen and (max-width: 480px) {
 	:root {
-		--font-size: 26px;
+		--nav-font-adjest: 26px;
 	}
 }
 

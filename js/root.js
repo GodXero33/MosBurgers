@@ -1,4 +1,6 @@
-const SHOP_WINDOW = {};
+const SHOP_WINDOW = {
+	db_host: 'http://localhost:5500'
+};
 
 
 
@@ -36,6 +38,10 @@ function loadDynamicSrcipt (url) {
 			rej({ ok: false });
 		}
 	});
+}
+
+function sendWarningAlert (message) {
+	alert(message);
 }
 
 window.addEventListener('load', () => {

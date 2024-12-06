@@ -1,6 +1,6 @@
 #nav-panel {
 	& {
-		--font-local-size: clamp(1rem, 5vw, 1.5rem);
+		--font-local-size: clamp(calc(var(--nav-font-adjest) * 1), 5vw, calc(var(--nav-font-adjest) * 1.5));
 		isolation: isolate;
 		position: absolute;
 		padding-block: calc(var(--font-local-size) * 1.5);
@@ -127,6 +127,10 @@
 
 	& > div:last-child .btn:nth-child(4) > div:first-child {
 		background-image: url(../../res/img/report.png);
+	}
+
+	& > div:last-child .btn:nth-child(5) > div:first-child {
+		background-image: url(../../res/img/gear.png);
 	}
 
 	& > div:last-child .btn > div:nth-child(2) {
