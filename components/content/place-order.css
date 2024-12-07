@@ -8,13 +8,90 @@
 			overflow: hidden !important;
 		}
 
-		& h1 {
+		& .header {
+			position: relative;
+			top: 0;
+			left: 0;
+			width: 100%;
+			max-width: calc(1600px + 1rem);
+			height: fit-content;
+			display: flex;
+			container: place-order-header / inline-size;
+		}
+
+		& .header > div {
+			position: relative;
+			margin-inline: auto;
+			top: 0;
+			left: 0;
+			right: 0;
+			width: calc(100% - 1rem);
+			height: fit-content;
+			display: flex;
+			gap: 0.5rem;
+		}
+
+		& .header > div h1 {
 			padding: calc(var(--font-local-size) * 0.2);
 			padding-block: 1rem;
+			width: fit-content;
 			font-size: calc(var(--font-local-size) * 1.5);
-			text-align: center;
 			letter-spacing: calc(var(--font-local-size) * 0.15);
 			color: var(--text-color-v1);
+		}
+
+		& .header > div > div {
+			--loc-font-size: clamp(0.8rem, 10vw, 1rem);
+			position: relative;
+			padding: 0.5rem;
+			top: 0;
+			left: 0;
+			flex-grow: 1;
+			flex-shrink: 1;
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		& .header > div > div > * {
+			padding: 0.2rem;
+			color: var(--text-color-v1);
+			font-size: var(--loc-font-size);
+			letter-spacing: calc(var(--loc-font-size) * 0.1);
+			text-align: center;
+		}
+
+		& .header > div > div select, & .header > div > div input {
+			border: none;
+			outline: none;
+			max-width: 200px;
+			background-color: hsl(from var(--background-color) h s calc(l + 20));
+			border-radius: 0.4rem;
+			cursor: pointer;
+			scrollbar-width: thin;
+			scrollbar-color: var(--scrollbar-color) transparent;
+		}
+
+		& .header > div > div input {
+			width: 50%;
+			text-align: left;
+		}
+
+		& .header > div > div input::placeholder {
+			color: hsla(from var(--text-color-v1) h s l / 60%);
+			text-align: center;
+		}
+
+		& .header > div > div select:hover {
+			background-color: hsl(from var(--background-color) h s calc(l + 30));
+		}
+
+		& .header > div > div option {
+			border: none;
+			outline: none;
+			background-color: hsl(from var(--background-color) h s calc(l + 20));
+			cursor: pointer;
 		}
 
 		& .items, & .items > div {
@@ -56,6 +133,22 @@
 			justify-content: center;
 			gap: 0.5rem;
 			container: place-order-items-holder / inline-size;
+		}
+
+		@container place-order-header (max-width: 480px) {
+			& .header > div {
+				flex-direction: column;
+				gap: 0;
+			}
+
+			& .header > div > div {
+				justify-content: flex-start;
+				flex-direction: column;
+			}
+
+			& .header > div > div select, & .header > div > div input {
+				width: 100%;
+			}
 		}
 	}
 

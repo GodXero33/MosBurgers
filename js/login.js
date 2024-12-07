@@ -39,6 +39,13 @@
 			return;
 		}
 
+		if (password == '') {
+			passwordInput.setCustomValidity('Invalid Password!');
+			passwordInput.reportValidity();
+			event.target.disabled = false;
+			return;
+		}
+
 		try {
 			const response = await fetch(`${SHOP_WINDOW.db_host}/admin/${userName}/${password}`);
 

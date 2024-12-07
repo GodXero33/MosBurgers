@@ -44,6 +44,10 @@ function sendWarningAlert (message) {
 	alert(message);
 }
 
+function wait (time) {
+	return new Promise(res => setTimeout(res, time));
+}
+
 window.addEventListener('load', () => {
 	SHOP_WINDOW['main-container'] = document.getElementById('main-container');
 	SHOP_WINDOW['loader'] = document.getElementById('loader');

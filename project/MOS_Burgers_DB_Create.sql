@@ -52,8 +52,7 @@ CREATE TABLE mos_order (
 	admin_id INT,
 	FOREIGN KEY (admin_id) REFERENCES admin (admin_id),
 	FOREIGN KEY (customer_id) REFERENCES customer (customer_id),
-	PRIMARY KEY (order_id),
-	CHECK (final_amount = total_amount - discount)
+	PRIMARY KEY (order_id)
 );
 
 CREATE TABLE order_item (
@@ -109,6 +108,7 @@ INSERT INTO food_item (name, code, price, discount, category) VALUES
 ('Milkshake', 'MS010', 4.49, 0.50, 'Beverages');
 
 INSERT INTO admin (name, phone, email, address, salary, position, dob, password) VALUES
+('GodXero', '0770110422', 'godxero@heaven.com', '123 Burger St.', 300000.00, 'Manager', '2001-07-25', '1234'),
 ('John Doe', '1234567890', 'john.doe@mos.com', '123 Burger St.', 3000.00, 'Manager', '1985-03-25', 'manager123'),
 ('Jane Smith', '9876543210', 'jane.smith@mos.com', '456 Submarine Ave.', 2500.00, 'Cashier', '1990-07-15', 'cashier456'),
 ('Mark Lee', '1122334455', 'mark.lee@mos.com', '789 Fries Ln.', 3200.00, 'Manager', '1982-11-05', 'admin789'),

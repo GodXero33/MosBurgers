@@ -52,7 +52,21 @@
 	</section>
 	<section id="place-order-section" class="hide">
 		<div class="container">
-			<h1>Foods</h1>
+			<div class="header">
+				<div>
+					<h1>Foods</h1>
+					<div>
+						<input type="text" id="place-order-food-search" placeholder="search" title="search">
+						<select id="place-order-food-filter" title="filter">
+							<option value="All">All</option>
+							<option value="Burgers">Burgers</option>
+							<option value="Submarines">Submarines</option>
+							<option value="Beverages">Beverages</option>
+							<option value="Other">Other</option>
+						</select>
+					</div>
+				</div>
+			</div>
 			<div class="items">
 				<div>
 					<div id="place-order-items-holder"></div>

@@ -11,7 +11,9 @@
 	const cartOpenBtn = document.getElementById('open-cart-btn');
 	const cartPlaceBtn = document.getElementById('cart-place-btn');
 	const cartHolder = document.getElementById('cart-holder');
-
+	const placeOrderFoodFilter = document.getElementById('place-order-food-filter');
+	const placeOrderFoodSearch = document.getElementById('place-order-food-search');
+	
 	let items = null;
 	let placeOrderCardComponent = null;
 	let itemPlaceComponent = null;
@@ -19,6 +21,8 @@
 	let cartItemComponent = null;
 	let currentPlaceItemIndex = -1;
 	let currentPlaceItemCard = null;
+	let isOrderPlacing = false;
+	let currentFoodFilterState = 'All';
 	const cart = {
 		items: [],
 		price: 0,
@@ -31,6 +35,8 @@
 			sendWarningAlert('The cart is Empty. Can\'t place an order right networkInterfaces. Please add somthing into the cart.');
 			return;
 		}
+
+		isOrderPlacing = true;
 
 		// After adding customer details
 		const customer_id = 1;
@@ -75,6 +81,7 @@
 			if (!response.ok) throw new Error('Somthing went wrong while placing order.');
 
 			const data = await response.json();
+			await wait(5000);
 			
 			if (data.ok) {
 				alert('Order Placed!');
@@ -86,6 +93,8 @@
 		} catch (error) {
 			console.log(error);
 		}
+
+		isOrderPlacing = false;
 	}
 
 	function hideCartCard () {
@@ -143,9 +152,10 @@
 	}
 
 	function addPlaceItemToCart () {
-		if (currentPlaceItemIndex == -1) return;
+		const item = items.find(item => item['item_id'] == currentPlaceItemIndex);
 
-		const item = items[currentPlaceItemIndex];
+		if (!item) return;
+
 		const existItemIndex = cart.items.findIndex(cartItem => cartItem.item.code == item.code);
 		const count = itemPlaceCountInput.value;
 
@@ -201,9 +211,11 @@
 
 	function showItemPlaceCard () {
 		itemPlaceContainer.classList.add('show');
+		const item = items.find(item => item['item_id'] == currentPlaceItemIndex);
 
-		const item = items[currentPlaceItemIndex];
-		const existItem = cart.items.find(cartItem => cartItem.item.code == item.code);
+		if (!item) return;
+
+		const existItem = cart.items.find(cartItem => cartItem.item['item_id'] == item['item_id']);
 
 		if (existItem) {
 			itemPlaceCountInput.value = existItem.count;
@@ -211,7 +223,10 @@
 	}
 
 	function updateItemPlaceCard () {
-		const item = items[currentPlaceItemIndex];
+		const item = items.find(item => item['item_id'] == currentPlaceItemIndex);
+
+		if (!item) return;
+
 		const count = itemPlaceCountInput.value;
 		const price = item.price * count;
 		const discount = item.discount * count;
@@ -230,16 +245,31 @@
 	}
 
 	function createFoodCards () {
-		items.forEach((item, index) => {
+		items.forEach(item => {
 			const card = placeOrderCardComponent
 				.replace(':PRICE', item['price'])
 				.replace(':DISCOUNT', item['discount'])
 				.replace(':TITLE', item['name'])
 				.replace(':IMAGE', item['code'])
-				.replace(':INDEX', index);
+				.replace(':INDEX', item['item_id']);
+			const parser = new DOMParser();
+			const doc = parser.parseFromString(card, 'text/html');
+			const cardDOM = doc.querySelector('.item-card');
 
-			itemsHolder.innerHTML += card;
+			item.cardDOM = cardDOM;
+			itemsHolder.appendChild(cardDOM);
 		});
+	}
+
+	function filterFoodCardsByCategory (category) {
+		itemsHolder.innerHTML = '';
+		items.filter(item => category == 'All' || item['category'] == category).forEach(item => itemsHolder.appendChild(item['cardDOM']));
+	}
+
+	function filterFoodCardsByName (name) {
+		itemsHolder.innerHTML = '';
+		name = name.trim();
+		items.filter(item => item['name'].toLowerCase().includes(name.toLowerCase())).forEach(item => itemsHolder.appendChild(item['cardDOM']));
 	}
 
 	async function loadItems () {
@@ -283,6 +313,11 @@
 			}
 
 			if (event.target == cartCloseBtn) {
+				if (isOrderPlacing) {
+					sendWarningAlert('The order is still placing. Please wait!');
+					return;
+				}
+
 				hideCartCard();
 				return;
 			}
@@ -309,6 +344,15 @@
 
 		itemPlacePlaceBtn.addEventListener('click', addPlaceItemToCart);
 		itemPlaceCountInput.addEventListener('input', updateItemPlaceCard);
+		placeOrderFoodFilter.addEventListener('change', () => {
+			if (currentFoodFilterState == placeOrderFoodFilter.value) return;
+
+			currentFoodFilterState = placeOrderFoodFilter.value;
+			filterFoodCardsByCategory(currentFoodFilterState);
+		});
+		placeOrderFoodSearch.addEventListener('input', () => {
+			filterFoodCardsByName(placeOrderFoodSearch.value);
+		});
 	}
 
 	loadFoodResources();
