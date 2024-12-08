@@ -80,28 +80,29 @@
 		releaseMemory = null;
 	}
 
-	function loginSuccess (user) {
+	async function loginSuccess (user) {
 		releaseMemory();
 		document.title = `Mos Burger - ${user['name']}`;
 		SHOP_WINDOW['admin'] = user;
 		SHOP_WINDOW['loader'].classList.remove('hide');
 
-		loadDynamicSrcipt('js/content.js').then(data => {
-			// console.log(data);
-		}).catch(error => {
-			console.error(error);
-		});
+		await loadDynamicSrcipt('js/content.js');
 	}
 
-	function init () {
-		newStyleSheet('components/login/login.css', 'login');
+	async function init () {
+		try {
+			await newStyleSheet('components/login/login.css', 'login');
+		} catch (error) {
+			console.error(error);
+		}
+
 		SHOP_WINDOW['loader'].classList.add('hide');
 	
 		document.getElementById('login-btn').addEventListener('click', loginClick);
 		document.getElementById('user-name-input').addEventListener('input', inputResetValidity);
 		document.getElementById('password-input').addEventListener('input', inputResetValidity);
 
-		document.getElementById('login-btn').click(); // remove
+		// document.getElementById('login-btn').click(); // remove
 	}
 
 	async function createLogin () {

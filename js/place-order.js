@@ -13,6 +13,10 @@
 	const cartHolder = document.getElementById('cart-holder');
 	const placeOrderFoodFilter = document.getElementById('place-order-food-filter');
 	const placeOrderFoodSearch = document.getElementById('place-order-food-search');
+	const customerSelectContainer = document.getElementById('customer-select-container');
+	const customerSelectActionBtn = document.getElementById('customer-select-action-btn');
+	const customerSelectCloseBtn = document.getElementById('customer-select-close-btn');
+	const customerSelectInputs = Array.from(customerSelectContainer.querySelectorAll('.customer-select-input'));
 	
 	let items = null;
 	let placeOrderCardComponent = null;
@@ -30,71 +34,68 @@
 		total: 0
 	};
 
-	async function placeOrder () {
-		if (cart.items.length == 0) {
-			sendWarningAlert('The cart is Empty. Can\'t place an order right networkInterfaces. Please add somthing into the cart.');
-			return;
-		}
-
-		isOrderPlacing = true;
-
-		// After adding customer details
-		const customer_id = 1;
-		const admin_id = SHOP_WINDOW['admin'].admin_id;
-		const today = new Date();
-		const place_date = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
-		const total_amount = cart.total;
-		const discount = cart.discount;
-		const final_amount = cart.total;
-		
-		const order = {
-			customer_id,
-			admin_id,
-			place_date,
-			total_amount,
-			discount,
-			final_amount,
-			items: cart.items.map(cartItem => {
-				const item_id = cartItem.item.item_id;
-				const quantity = cartItem.count;
-				const total_price = cartItem.total;
-				const price_per_unit = cartItem.item.price;
-
-				return {
-					item_id,
-					quantity,
-					total_price,
-					price_per_unit
-				};
-			})
-		};
-
-		try {
-			const response = await fetch(`${SHOP_WINDOW.db_host}/order`, {
-				method: 'POST',
-				body: JSON.stringify(order),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-
-			if (!response.ok) throw new Error('Somthing went wrong while placing order.');
-
-			const data = await response.json();
-			await wait(5000);
+	function placeOrder () {
+		return new Promise(async (res, rej) => {
+			isOrderPlacing = true;
+	
+			const customer_id = 1;
+			const admin_id = SHOP_WINDOW['admin'].admin_id;
+			const today = new Date();
+			const place_date = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+			const total_amount = cart.total;
+			const discount = cart.discount;
+			const final_amount = cart.total;
 			
-			if (data.ok) {
-				alert('Order Placed!');
-				hideCartCard();
-				resetCart();
-			} else {
-				alert('Order Failed!');
+			const order = {
+				customer_id,
+				admin_id,
+				place_date,
+				total_amount,
+				discount,
+				final_amount,
+				items: cart.items.map(cartItem => {
+					const item_id = cartItem.item.item_id;
+					const quantity = cartItem.count;
+					const total_price = cartItem.total;
+					const price_per_unit = cartItem.item.price;
+	
+					return {
+						item_id,
+						quantity,
+						total_price,
+						price_per_unit
+					};
+				})
+			};
+	
+			try {
+				const response = await fetch(`${SHOP_WINDOW.db_host}/order`, {
+					method: 'POST',
+					body: JSON.stringify(order),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
+	
+				if (!response.ok) throw new Error('Somthing went wrong while placing order.');
+	
+				const data = await response.json();
+				isOrderPlacing = false;
+				
+				if (data.ok) {
+					hideCartCard();
+					resetCart();
+					sendInfoAlert('Order Placed!');
+					res();
+				} else {
+					sendInfoAlert('Order Failed!');
+					rej();
+				}
+			} catch (error) {
+				console.log(error);
+				rej();
 			}
-		} catch (error) {
-			console.log(error);
-		}
-
-		isOrderPlacing = false;
+		});
 	}
 
 	function hideCartCard () {
@@ -272,6 +273,149 @@
 		items.filter(item => item['name'].toLowerCase().includes(name.toLowerCase())).forEach(item => itemsHolder.appendChild(item['cardDOM']));
 	}
 
+	function checkCustomerIsAlreadyLogged (id) {
+		return new Promise(async (res, rej) => {
+			try {
+				const response = await fetch(`${SHOP_WINDOW['db_host']}/customers/${id}`);
+
+				if (!response.ok) throw new Error('Failed to fetch customer search.');
+
+				const customer = await response.json();
+				res(customer);
+			} catch (error) {
+				console.error(error);
+				res(null);
+			}
+		});
+	}
+
+	function addNewCustomer (customer) {
+		return new Promise(async (res, rej) => {
+			try {
+				const response = await fetch(`${SHOP_WINDOW['db_host']}/customers`, {
+					method: 'POST',
+					body: JSON.stringify(customer),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
+
+				if (!response.ok) throw new Error('Failed to fetch add new customer.');
+
+				const newCustomer = await response.json();
+				res(newCustomer);
+			} catch (error) {
+				console.error(error);
+				res(null);
+			}
+		});
+	}
+
+	function resetCustomerSelectContainer () {
+		customerSelectInputs.forEach((input, index) => {
+			input.disabled = index != 0;
+			input.value = '';
+		});
+
+		customerSelectActionBtn.disabled = false;
+		customerSelectActionBtn.classList.remove('add');
+		customerSelectActionBtn.classList.remove('place');
+		customerSelectContainer.classList.remove('show');
+	}
+
+	async function customerSelectActionBtnAddCustomer () {
+		customerSelectActionBtn.disabled = true;
+		const values = customerSelectInputs.map(input => input.value);
+		
+		if (!/^([a-zA-Z]{3,})( [a-zA-Z]{3,})*$/.test(values[1])) {
+			sendWarningAlert('Invalid name!');
+			return;
+		}
+
+		if (values[2] != '' && !/^07(\d{8})$/.test(values[2])) {
+			sendWarningAlert('Invalid phone!');
+			return;
+		}
+
+		if (values[3] != '' && !/^([a-z0-9]+)@([a-z]*)mail.([a-z]+)$/.test(values[3])) {
+			sendWarningAlert('Invalid email!');
+			return;
+		}
+
+		const customer = {
+			name: values[1],
+			phone: values[2],
+			email: values[3],
+			address: values[4]
+		};
+
+		try {
+			const newCustomer = await addNewCustomer(customer);
+			
+			if (newCustomer) {
+				customerSelectInputs[0].value = newCustomer['customer_id'];
+				sendInfoAlert('New Customer ID is ' + newCustomer['customer_id']);
+
+				customerSelectInputs.forEach(input => input.disabled = true);
+
+				customerSelectActionBtn.classList.remove('add');
+				customerSelectActionBtn.classList.add('place');
+				customerSelectActionBtn.disabled = false;
+			} else {
+				sendWarningAlert('Failed to add new Customer. Please try again!');
+			}
+		} catch (error) {
+			console.error(error);
+		}
+
+		customerSelectActionBtn.disabled = false;
+	}
+
+	async function customerSelectActionBtnAction () {
+		if (customerSelectActionBtn.classList.contains('add')) {
+			customerSelectActionBtnAddCustomer();
+			return;
+		}
+
+		if (customerSelectActionBtn.classList.contains('place')) {
+			customerSelectActionBtn.disabled = true;
+			await placeOrder();
+			resetCustomerSelectContainer();
+			return;
+		}
+
+		if (customerSelectInputs[0].value * 1 < 1) {
+			sendWarningAlert('Customer ID is invlid!');
+			return;
+		}
+
+		customerSelectInputs[0].disabled = customerSelectActionBtn.disabled = true;
+
+		try {
+			const loggedCustomer = await checkCustomerIsAlreadyLogged(customerSelectInputs[0].value * 1);
+			
+			if (loggedCustomer) {
+				customerSelectInputs[1].value = loggedCustomer['name'];
+				customerSelectInputs[2].value = loggedCustomer['phone'];
+				customerSelectInputs[3].value = loggedCustomer['email'];
+				customerSelectInputs[4].value = loggedCustomer['address'];
+				customerSelectActionBtn.classList.add('place');
+				customerSelectActionBtn.disabled = false;
+			} else {
+				sendWarningAlert('customer is not found. Please add new customer!');
+				customerSelectActionBtn.disabled = false;
+				customerSelectInputs[0].value = '';
+
+				for (let i = 1; i < customerSelectInputs.length; i++) customerSelectInputs[i].disabled = false;
+
+				customerSelectActionBtn.classList.add('add');
+			}
+		} catch (error) {
+			resetCustomerSelectContainer();
+			console.error(error);
+		}
+	}
+
 	async function loadItems () {
 		try {
 			const response = await fetch(`${SHOP_WINDOW.db_host}/items`);
@@ -328,7 +472,22 @@
 			}
 
 			if (event.target == cartPlaceBtn) {
-				placeOrder();
+				if (cart.items.length == 0) {
+					sendWarningAlert('The cart is Empty. Can\'t place an order right networkInterfaces. Please add somthing into the cart.');
+					return;
+				}
+
+				customerSelectContainer.classList.add('show');
+				return;
+			}
+
+			if (event.target == customerSelectActionBtn) {
+				customerSelectActionBtnAction();
+				return;
+			}
+
+			if (event.target == customerSelectCloseBtn) {
+				resetCustomerSelectContainer();
 				return;
 			}
 

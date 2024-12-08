@@ -76,11 +76,11 @@
 		& .header > div > div input {
 			width: 50%;
 			text-align: left;
-		}
 
-		& .header > div > div input::placeholder {
-			color: hsla(from var(--text-color-v1) h s l / 60%);
-			text-align: center;
+			&::placeholder {
+				color: hsla(from var(--text-color-v1) h s l / 60%);
+				text-align: center;
+			}
 		}
 
 		& .header > div > div select:hover {
@@ -240,7 +240,7 @@
 	
 		& .card-cont .input button {
 			cursor: pointer;
-			background-image: url(../../res/img/add-cart-light.png);
+			background-image: url(res/img/add-cart-light.png);
 			background-size: auto 80%;
 		}
 
@@ -254,7 +254,7 @@
 			background-color: var(--text-color-v1);
 			cursor: pointer;
 			border-radius: 50%;
-			background-image: url(../../res/img/close-dark.png);
+			background-image: url(res/img/close-dark.png);
 			background-size: 50% 50%;
 		}
 	}	
@@ -267,7 +267,7 @@
 		aspect-ratio: 1 / 1;
 		background-color: var(--text-color-v1);
 		border-radius: 50%;
-		background-image: url(../../res/img/add-cart-dark.png);
+		background-image: url(res/img/add-cart-dark.png);
 		background-size: 60% 60%;
 		cursor: pointer;
 		box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
@@ -314,7 +314,7 @@
 			background-color: var(--place-order-add-color);
 			border-radius: 0.4rem;
 			cursor: pointer;
-			background-image: url(../../res/img/add-cart-light.png);
+			background-image: url(res/img/add-cart-light.png);
 			background-size: auto 80%;
 		}
 
@@ -327,7 +327,7 @@
 			background-color: var(--text-color-v1);
 			cursor: pointer;
 			border-radius: 50%;
-			background-image: url(../../res/img/close-dark.png);
+			background-image: url(res/img/close-dark.png);
 			background-size: 50% 50%;
 		}
 
@@ -345,6 +345,174 @@
 			overflow-y: auto;
 			scrollbar-width: thin;
 			scrollbar-color: var(--scrollbar-color) transparent;
+		}
+	}
+
+	#customer-select-container {
+		& {
+			--close-btn-size: clamp(1.5rem, 10vw, 2rem);
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			transition: opacity 0.2s linear;
+			opacity: 0;
+			pointer-events: none;
+		}
+
+		&.show {
+			opacity: 1;
+			pointer-events: all;
+		}
+
+		& .wrapper {
+			position: absolute;
+			margin: auto;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			width: 100%;
+			height: 100%;
+			background-color: var(--background-color);
+		}
+
+		#customer-select-input-container {
+			& {
+				position: absolute;
+				margin: auto;
+				padding: 0.5rem;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				width: 100%;
+				height: fit-content;
+				max-width: 640px;
+				max-height: 100%;
+				overflow-x: hidden;
+				overflow-y: auto;
+				scrollbar-width: thin;
+				scrollbar-color: var(--scrollbar-color) transparent;
+			}
+
+			& .box {
+				--loc-font-size: clamp(0.8rem, 10vw, 1rem);
+				position: relative;
+				padding: 0.25rem;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: fit-content;
+				display: grid;
+				grid-template-columns: repeat(2, auto);
+				gap: 0.5rem;
+				justify-content: center;
+				align-items: center;
+				justify-items: center;
+			}
+
+			& .box * {
+				position: relative;
+				padding: 0.5rem;
+				top: 0;
+				left: 0;
+				width: fit-content;
+				height: fit-content;
+				background-color: transparent;
+				font-size: var(--loc-font-size);
+				color: var(--text-color-v1);
+			}
+
+			& .box input {
+				outline: none;
+				border: none;
+				max-width: calc(var(--loc-font-size) * 80);
+				text-align: center;
+				background-color: rgba(0, 0, 0, 0.6);
+				transition: background-color 0.2s linear;
+
+				&::-webkit-inner-spin-button {
+					opacity: 1;
+				}
+
+				&::placeholder {
+					color: hsla(from var(--text-color-v1) h s l / 60%);
+					text-align: center;
+				}
+
+				&:focus {
+					background-color: rgba(0, 0, 0, 0.9);
+				}
+
+				&:not(:disabled) {
+					cursor: pointer;
+				}
+
+				&:disabled {
+					background-color: rgba(0, 0, 0, 0.3);
+				}
+			}
+
+			#customer-select-action-btn {
+				position: relative;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: fit-content;
+				background-color: hsl(calc(var(--theme-hue) + 30deg), 100%, 50%);
+				box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+				grid-column: 2;
+				font-size: var(--loc-font-size);
+				color: var(--text-color-v1);
+				cursor: pointer;
+				border: none;
+				outline: none;
+				border-radius: 0.2rem;
+				transition: background-color 0.2s linear, color 0.2s linear;
+
+				&:not(:disabled):hover {
+					background-color: hsl(calc(var(--theme-hue) + 30deg), 100%, 80%);
+					color: var(--text-color-v2);
+				}
+
+				&::after {
+					content: 'Check';
+					position: relative;
+					padding: 0.2rem;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+				}
+
+				&.place::after {
+					content: 'Place';
+				}
+
+				&.add::after {
+					content: 'Add';
+				}
+
+				&:disabled {
+					cursor: default;
+					opacity: 0.6;
+				}
+			}
+		}
+
+		#customer-select-close-btn {
+			position: absolute;
+			top: 0.5rem;
+			right: 0.5rem;
+			width: var(--close-btn-size);
+			height: var(--close-btn-size);
+			background-color: var(--text-color-v1);
+			cursor: pointer;
+			border-radius: 50%;
+			background-image: url(res/img/close-dark.png);
+			background-size: 50% 50%;
 		}
 	}
 }

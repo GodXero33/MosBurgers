@@ -5,15 +5,27 @@ const SHOP_WINDOW = {
 
 
 function newStyleSheet (url, name) {
-	const style = document.createElement('link');
-	style.setAttribute('rel', 'stylesheet');
-	style.setAttribute('href', `${url}?t=${new Date().getTime()}`);
-	style.setAttribute('mos-style-name', name);
-	document.head.appendChild(style);
+	return new Promise(async (res, rej) => {
+		try {
+			const response = await fetch(`${url}?t=${new Date().getMilliseconds()}`);
+			
+			if (!response.ok) throw new Error('Failed to load style sheet. ' + url);
+
+			const css = await response.text();
+
+			const style = document.createElement('style');
+			style.setAttribute('mos-style-name', name);
+			style.innerHTML = css;
+			document.head.appendChild(style);
+			res();
+		} catch (error) {
+			rej(error);
+		}
+	});
 }
 
 function deleteStyleSheet (name) {
-	const style = document.head.querySelector(`link[mos-style-name="${name}"]`);
+	const style = document.head.querySelector(`style[mos-style-name="${name}"]`);
 	style.remove();
 }
 
@@ -44,17 +56,21 @@ function sendWarningAlert (message) {
 	alert(message);
 }
 
+function sendInfoAlert (message) {
+	alert(message);
+}
+
 function wait (time) {
 	return new Promise(res => setTimeout(res, time));
 }
 
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
 	SHOP_WINDOW['main-container'] = document.getElementById('main-container');
 	SHOP_WINDOW['loader'] = document.getElementById('loader');
 
-	loadDynamicSrcipt('js/login.js').then(data => {
-		// console.log(data);
-	}).catch(error => {
+	try {
+		await loadDynamicSrcipt('js/login.js');
+	} catch (error) {
 		console.error(error);
-	});
+	}
 });

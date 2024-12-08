@@ -47,7 +47,7 @@
 		right: 0;
 		width: calc(var(--font-local-size) * 1.5);
 		height: calc(var(--font-local-size) * 1.5);
-		background-image: url(../../res/img/logo.png);
+		background-image: url(res/img/logo.png);
 		background-size: 80% 80%;
 	}
 
@@ -114,23 +114,23 @@
 	}
 
 	& > div:last-child .btn:nth-child(1) > div:first-child {
-		background-image: url(../../res/img/home.png);
+		background-image: url(res/img/home.png);
 	}
 
 	& > div:last-child .btn:nth-child(2) > div:first-child {
-		background-image: url(../../res/img/place-order.png);
+		background-image: url(res/img/place-order.png);
 	}
 
 	& > div:last-child .btn:nth-child(3) > div:first-child {
-		background-image: url(../../res/img/warehouse.png);
+		background-image: url(res/img/warehouse.png);
 	}
 
 	& > div:last-child .btn:nth-child(4) > div:first-child {
-		background-image: url(../../res/img/report.png);
+		background-image: url(res/img/report.png);
 	}
 
 	& > div:last-child .btn:nth-child(5) > div:first-child {
-		background-image: url(../../res/img/gear.png);
+		background-image: url(res/img/gear.png);
 	}
 
 	& > div:last-child .btn > div:nth-child(2) {

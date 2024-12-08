@@ -1,30 +1,24 @@
 (function () {
-	function init () {
+	async function init () {
 		deleteStyleSheet('login');
-		newStyleSheet('components/content/nav-panel.css', 'nav-panel');
-		newStyleSheet('components/content/content.css', 'content');
-		newStyleSheet('components/content/home.css', 'home');
-		newStyleSheet('components/content/place-order.css', 'place-order');
-		newStyleSheet('components/food-item/item-card.css', 'item-card');
-		newStyleSheet('components/food-item/item-place.css', 'item-place');
-		newStyleSheet('components/food-item/cart.css', 'cart');
-		SHOP_WINDOW['loader'].classList.add('hide');
 
-		loadDynamicSrcipt('js/nav-panel.js').then(data => {
-			// console.log(data);
-		}).catch(error => {
+		try {
+			await newStyleSheet('components/content/nav-panel.css', 'nav-panel');
+			await newStyleSheet('components/content/content.css', 'content');
+			await newStyleSheet('components/content/home.css', 'home');
+			await newStyleSheet('components/content/place-order.css', 'place-order');
+			await newStyleSheet('components/food-item/item-card.css', 'item-card');
+			await newStyleSheet('components/food-item/item-place.css', 'item-place');
+			await newStyleSheet('components/food-item/cart.css', 'cart');
+
+			await loadDynamicSrcipt('js/nav-panel.js');
+			await loadDynamicSrcipt('js/home.js');
+			await loadDynamicSrcipt('js/place-order.js');
+		} catch (error) {
 			console.error(error);
-		});
-		loadDynamicSrcipt('js/home.js').then(data => {
-			// console.log(data);
-		}).catch(error => {
-			console.error(error);
-		});
-		loadDynamicSrcipt('js/place-order.js').then(data => {
-			// console.log(data);
-		}).catch(error => {
-			console.error(error);
-		});
+		}
+
+		SHOP_WINDOW['loader'].classList.add('hide');
 	}
 
 	async function createContent () {

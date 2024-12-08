@@ -36,7 +36,7 @@ CREATE TABLE admin (
 CREATE TABLE customer (
 	customer_id INT AUTO_INCREMENT,
 	name VARCHAR(30),
-	phone VARCHAR(12) UNIQUE,
+	phone VARCHAR(12),
 	email VARCHAR(30),
 	address VARCHAR(60),
 	PRIMARY KEY (customer_id)
