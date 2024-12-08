@@ -11,13 +11,27 @@ import {
 	loadAdminByNameAndPW,
 	loadItems,
 	placeOrder
-} from './database.js';
+} from './mos_db.js';
 
 const app = express();
 app.use(express.json());
 
+const allowedOrigins = [
+	'https://192.168.154.67:8080',
+	'https://127.0.0.1:8080',
+	'http://192.168.154.67:8080',
+	'http://127.0.0.1:8080'
+];
+
 app.use(cors({
-	origin: 'http://localhost'
+	origin: (origin, callback) => {
+		if (!origin || allowedOrigins.includes(origin)) {
+			callback(null, true);
+		} else {
+			callback(new Error('Not allowed by CORS'));
+		}
+	},
+	credentials: true
 }));
 
 app.get('/customers', async (req, res) => {
