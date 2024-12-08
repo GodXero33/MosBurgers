@@ -7,7 +7,7 @@ const SHOP_WINDOW = {
 function newStyleSheet (url, name) {
 	return new Promise(async (res, rej) => {
 		try {
-			const response = await fetch(`${url}?t=${new Date().getMilliseconds()}`);
+			const response = await fetch(`${url}?t=${new Date().getTime()}`);
 			
 			if (!response.ok) throw new Error('Failed to load style sheet. ' + url);
 
