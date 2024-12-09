@@ -1,5 +1,9 @@
 const SHOP_WINDOW = {
-	db_host: 'http://localhost:5500'
+	db_host: 'http://localhost:5500',
+	init_content: 0
+};
+const SHOP_TEST = {
+	auto_loggin: true
 };
 
 
@@ -27,6 +31,23 @@ function newStyleSheet (url, name) {
 function deleteStyleSheet (name) {
 	const style = document.head.querySelector(`style[mos-style-name="${name}"]`);
 	style.remove();
+}
+
+function updateThemeMode (mode) {
+	if (mode == 'light') {
+		document.getElementById('theme-mode-switch-ghost-input').checked = true;
+	} else {
+		document.getElementById('theme-mode-switch-ghost-input').checked = false;
+	}
+}
+
+function updateLayoutStyles () {
+	if (!SHOP_WINDOW['user_style']) return;
+
+	const { theme, mode } = SHOP_WINDOW['user_style'];
+
+	updateThemeMode(mode);
+	document.querySelector(':root').style.setProperty('--theme-hue', `${theme}deg`);
 }
 
 function loadDynamicSrcipt (url) {
@@ -67,6 +88,12 @@ function wait (time) {
 window.addEventListener('load', async () => {
 	SHOP_WINDOW['main-container'] = document.getElementById('main-container');
 	SHOP_WINDOW['loader'] = document.getElementById('loader');
+
+	// Ghost input for change theme
+	const ghostInput = document.createElement('input');
+	ghostInput.setAttribute('id', 'theme-mode-switch-ghost-input');
+	ghostInput.setAttribute('type', 'checkbox');
+	document.body.appendChild(ghostInput);
 
 	try {
 		await loadDynamicSrcipt('js/login.js');

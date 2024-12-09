@@ -80,13 +80,39 @@
 		releaseMemory = null;
 	}
 
+	function loadUserSettings (adimId) {
+		return new Promise((res, rej) => {
+			try {
+				res({
+					style: {
+						theme: 0,
+						mode: 'light'
+					},
+					initialPage: 1
+				});
+			} catch (error) {
+				rej(error);
+			}
+		});
+	}
+
 	async function loginSuccess (user) {
 		releaseMemory();
 		document.title = `Mos Burger - ${user['name']}`;
 		SHOP_WINDOW['admin'] = user;
 		SHOP_WINDOW['loader'].classList.remove('hide');
 
-		await loadDynamicSrcipt('js/content.js');
+		try {
+			const userSettings = await loadUserSettings(user['admin_id']);
+			SHOP_WINDOW['user_style'] = userSettings.style;
+			SHOP_WINDOW['init_content'] = userSettings.initialPage;
+			updateLayoutStyles();
+
+			await loadDynamicSrcipt('js/content.js');
+			// console.log(userSettings);
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 	async function init () {
@@ -102,7 +128,11 @@
 		document.getElementById('user-name-input').addEventListener('input', inputResetValidity);
 		document.getElementById('password-input').addEventListener('input', inputResetValidity);
 
-		// document.getElementById('login-btn').click(); // remove
+		if (SHOP_TEST['auto_loggin']) {
+			document.getElementById('user-name-input').value = 'GodXero';
+			document.getElementById('password-input').value = '1234';
+			document.getElementById('login-btn').click();
+		}
 	}
 
 	async function createLogin () {

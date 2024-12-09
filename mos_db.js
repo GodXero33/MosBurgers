@@ -1,98 +1,115 @@
-import mysql from 'mysql2';
+import express from 'express';
 
-import dotenv from 'dotenv';
+import cors from 'cors';
 
-dotenv.config();
+import {
+	loadCustomers,
+	loadCustomerByName,
+	loadCustomerById,
+	addCustomer,
+	loadAdminByName,
+	loadAdminByNameAndPW,
+	loadItems,
+	placeOrder
+} from './mos_db_connection.js';
 
-const pool = mysql.createPool({
-	host: process.env.MYSQL_HOST,
-	port: process.env.MYSQL_PORT,
-	user: process.env.MYSQL_USER,
-	password: process.env.MYSQL_PASSWORD,
-	database: process.env.MYSQL_DATABASE
-}).promise();
+const app = express();
+app.use(express.json());
 
-export async function loadCustomers () {
-	const [results] = await pool.query(`
-SELECT *
-FROM customer
-	`);
-	return results;
-}
+const allowedOrigins = [
+	'https://192.168.154.67:8080',
+	'https://127.0.0.1:8080',
+	'http://192.168.154.67:8080',
+	'http://127.0.0.1:8080'
+];
 
-export async function loadCustomerByName (userName) {
-	const [results] = await pool.query(`
-SELECT *
-FROM customer
-WHERE name = ?
-	`, [userName]);
-	return results[0];
-}
+app.use(cors({
+	origin: (origin, callback) => {
+		if (!origin || allowedOrigins.includes(origin)) {
+			callback(null, true);
+		} else {
+			callback(new Error('Not allowed by CORS'));
+		}
+	},
+	credentials: true
+}));
 
-export async function loadCustomerById (id) {
-	const [results] = await pool.query(`
-SELECT *
-FROM customer
-WHERE customer_id = ?
-	`, [id]);
-	return results[0];
-}
+app.get('/customers', async (req, res) => {
+	const customers = await loadCustomers();
+	res.send(customers);
+});
 
-export async function addCustomer (name, phone, email, address) {
-	const [result] = await pool.query(`
-INSERT INTO customer (name, phone, email,  address)
-VALUES (?, ?, ?, ?)
-	`, [name, phone, email, address]);
-	const id = result.insertId;
-	return loadCustomerById(id);
-}
+app.get('/customers/:id', async (req, res) => {
+	const id = req.params.id;
+	const customer = await loadCustomerById(id);
+	res.send(customer);
+});
 
-export async function loadAdminByName (name) {
-	const [results] = await pool.query(`
-SELECT name, address, dob, email, phone, position, salary, admin_id
-FROM admin
-WHERE name = ?
-	`, [name]);
-	return results[0];
-}
+app.get('/admin/:name', async (req, res) => {
+	const name = req.params.name;
+	let customer = await loadAdminByName(name);
 
-export async function loadAdminByNameAndPW (name, password) {
-	const [results] = await pool.query(`
-SELECT name, address, dob, email, phone, position, salary, admin_id
-FROM admin
-WHERE name = ? AND password = ?
-	`, [name, password]);
-	return results[0];
-}
+	if (customer) {
+		customer.ok = true;
+	} else {
+		customer = { ok: false };
+	}
 
-export async function loadItems () {
-	const [results] = await pool.query(`
-SELECT *
-FROM food_item
-	`);
-	return results;
-}
+	res.send(customer);
+});
 
-export async function placeOrder (customer_id, admin_id, place_date, total_amount, discount, final_amount, items) {
-	let [result] = await pool.query(`
-INSERT INTO mos_order (customer_id, admin_id, place_date, total_amount, discount, final_amount)
-VALUES (?, ?, ?, ?, ?, ?)
-	`, [customer_id, admin_id, place_date, total_amount, discount, final_amount]);
-	const order_id = result.insertId;
+app.get('/admin/:name/:password', async (req, res) => {
+	const name = req.params.name;
+	const password = req.params.password;
+	let customer = await loadAdminByNameAndPW(name, password);
 
-	items.forEach(async item => {
-		await pool.query(`
-INSERT INTO order_item (item_id, order_id, quantity, total_price, price_per_unit)
-VALUES (?, ?, ?, ?, ?)
-		`, [item.item_id, order_id, item.quantity, item.total_price, item.price_per_unit]);
-	});
+	if (customer) {
+		customer.ok = true;
+	} else {
+		customer = { ok: false };
+	}
 
-	const today = new Date();
-	const date = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
-	const time = `${today.getHours()}:${today.getMinutes()}:00`;
+	res.send(customer);
+});
 
-	await pool.query(`
-INSERT INTO receipt (receipt_date, receipt_time, order_id)
-VALUES (?, ?, ?)
-	`, [date, time, order_id]);
-}
+app.get('/items', async (req, res) => {
+	const items = await loadItems();
+	res.send(items);
+});
+
+app.post('/customers', async (req, res) => {
+	const { name, phone, email, address } = req.body;
+	const customer = await addCustomer(name, phone, email, address);
+	res.status(201).send(customer);
+});
+
+app.post('/order', async (req, res) => {
+	const {
+		customer_id,
+		admin_id,
+		place_date,
+		total_amount,
+		discount,
+		final_amount,
+		items
+	} = req.body;
+	await placeOrder(
+		customer_id,
+		admin_id,
+		place_date,
+		total_amount,
+		discount,
+		final_amount,
+		items
+	);
+	res.status(201).send({ ok: true });
+});
+
+app.use((err, req, res, next) => {
+	console.error(err.stack);
+	res.status(500).send('Something broke!');
+});
+
+app.listen(5500, () => {
+	console.log('Server is running on port 5500');
+});

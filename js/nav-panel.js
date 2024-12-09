@@ -1,9 +1,9 @@
 (function () {
 	let navPanel = document.getElementById('nav-panel');
 	const navOpenBtn = navPanel.querySelector('input[type="checkbox"]');
-	let navBtns = Array.from(navPanel.querySelectorAll('.btn'));
+	let navBtns = Array.from(navPanel.querySelectorAll('input[type="radio"]'));
 	const contentSections = Array.from(document.getElementById('content-container').querySelectorAll('section'));
-	let currentActiveBtn = 1;
+	let currentActiveBtn = SHOP_WINDOW['init_content'];
 
 	function closeNavbar () {
 		navOpenBtn.checked = false;
@@ -14,6 +14,7 @@
 	navBtns.forEach((btn, index) => {
 		if (currentActiveBtn == index) {
 			currentActiveBtn = index;
+			btn.checked = true;
 			contentSections[currentActiveBtn].classList.remove('hide');
 		}
 
