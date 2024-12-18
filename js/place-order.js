@@ -325,7 +325,6 @@
 	}
 
 	async function customerSelectActionBtnAddCustomer () {
-		customerSelectActionBtn.disabled = true;
 		const values = customerSelectInputs.map(input => input.value);
 		
 		if (!/^([a-zA-Z]{3,})( [a-zA-Z]{3,})*$/.test(values[1])) {
@@ -342,6 +341,8 @@
 			sendWarningAlert('Invalid email!');
 			return;
 		}
+
+		customerSelectActionBtn.disabled = true;
 
 		const customer = {
 			name: values[1],
