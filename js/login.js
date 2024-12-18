@@ -86,7 +86,7 @@
 				res({
 					style: {
 						theme: 0,
-						mode: 'light'
+						mode: 'dark'
 					},
 					initialPage: 1
 				});

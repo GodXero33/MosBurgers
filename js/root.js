@@ -1,6 +1,6 @@
 const SHOP_WINDOW = {
 	db_host: 'http://localhost:5500',
-	init_content: 0
+	init_content: 2
 };
 const SHOP_TEST = {
 	auto_loggin: true

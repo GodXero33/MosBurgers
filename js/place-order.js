@@ -31,14 +31,15 @@
 		items: [],
 		price: 0,
 		discount: 0,
-		total: 0
+		total: 0,
+		customer: -1
 	};
 
 	function placeOrder () {
 		return new Promise(async (res, rej) => {
 			isOrderPlacing = true;
 	
-			const customer_id = 1;
+			const customer_id = cart.customer;
 			const admin_id = SHOP_WINDOW['admin'].admin_id;
 			const today = new Date();
 			const place_date = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
@@ -354,6 +355,7 @@
 			
 			if (newCustomer) {
 				customerSelectInputs[0].value = newCustomer['customer_id'];
+				cart.customer = newCustomer['customer_id'];
 				sendInfoAlert('New Customer ID is ' + newCustomer['customer_id']);
 
 				customerSelectInputs.forEach(input => input.disabled = true);
@@ -399,6 +401,7 @@
 				customerSelectInputs[2].value = loggedCustomer['phone'];
 				customerSelectInputs[3].value = loggedCustomer['email'];
 				customerSelectInputs[4].value = loggedCustomer['address'];
+				cart.customer = loggedCustomer['customer_id'];
 				customerSelectActionBtn.classList.add('place');
 				customerSelectActionBtn.disabled = false;
 			} else {
@@ -473,7 +476,7 @@
 
 			if (event.target == cartPlaceBtn) {
 				if (cart.items.length == 0) {
-					sendWarningAlert('The cart is Empty. Can\'t place an order right networkInterfaces. Please add somthing into the cart.');
+					sendWarningAlert('The cart is Empty. Can\'t place an order. Please add somthing into the cart.');
 					return;
 				}
 
