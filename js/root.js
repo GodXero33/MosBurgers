@@ -3,7 +3,7 @@ const SHOP_WINDOW = {
 	init_content: 2
 };
 const SHOP_TEST = {
-	auto_loggin: true
+	auto_loggin: false
 };
 
 

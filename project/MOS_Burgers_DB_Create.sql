@@ -20,7 +20,7 @@ CREATE TABLE food_item (
 	PRIMARY KEY (item_id)
 );
 
-CREATE TABLE admin (
+CREATE TABLE `admin` (
 	admin_id INT AUTO_INCREMENT,
 	name VARCHAR(30),
 	phone VARCHAR(12) UNIQUE,
@@ -29,7 +29,7 @@ CREATE TABLE admin (
 	salary DOUBLE(8, 2),
 	position ENUM('Cashier', 'Manager'),
 	dob DATE,
-	password VARCHAR(15),
+	password VARCHAR(255),
 	PRIMARY KEY (admin_id)
 );
 
@@ -77,7 +77,7 @@ CREATE TABLE receipt (
 
 DESC report;
 DESC food_item;
-DESC admin;
+DESC `admin`;
 DESC customer;
 DESC mos_order;
 DESC order_item;
@@ -107,7 +107,7 @@ INSERT INTO food_item (name, code, price, discount, category) VALUES
 ('Ice Cream', 'IC009', 3.99, 0.25, 'Other'),
 ('Milkshake', 'MS010', 4.49, 0.50, 'Beverages');
 
-INSERT INTO admin (name, phone, email, address, salary, position, dob, password) VALUES
+INSERT INTO `admin` (name, phone, email, address, salary, position, dob, password) VALUES
 ('GodXero', '0770110422', 'godxero@heaven.com', '123 Burger St.', 300000.00, 'Manager', '2001-07-25', '1234'),
 ('John Doe', '1234567890', 'john.doe@mos.com', '123 Burger St.', 3000.00, 'Manager', '1985-03-25', 'manager123'),
 ('Jane Smith', '9876543210', 'jane.smith@mos.com', '456 Submarine Ave.', 2500.00, 'Cashier', '1990-07-15', 'cashier456'),
@@ -124,5 +124,5 @@ INSERT INTO customer (name, phone, email, address) VALUES
 
 SELECT * FROM report;
 SELECT * FROM food_item;
-SELECT * FROM admin;
+SELECT * FROM `admin`;
 SELECT * FROM customer;
